@@ -1,0 +1,11 @@
+---
+- hosts: all
+
+  tasks:
+  - name: yum update all
+    remote_user: centos
+    become: yes
+    yum:
+      name: '*'
+      state: latest
+      update_cache: yes

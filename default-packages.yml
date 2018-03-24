@@ -1,0 +1,19 @@
+---
+- hosts: all
+
+  tasks:
+  - name: add emacs-nox
+    remote_user: centos
+    become: yes
+    yum:
+      name: emacs-nox
+      state: latest
+      update_cache: yes
+      
+  - name: add bind-utils
+    remote_user: centos
+    become: yes
+    yum:
+      name: bind-utils
+      state: latest
+      update_cache: yes
