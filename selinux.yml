@@ -1,0 +1,9 @@
+---
+- hosts: all
+
+  tasks:
+  - name: disable selinux
+    remote_user: centos
+    become: yes
+    selinux:
+      state: disabled
