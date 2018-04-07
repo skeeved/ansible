@@ -1,0 +1,56 @@
+---
+- hosts: smtp-*.skeeved.org
+
+  tasks:
+  - name: ensure nfs-utils package is installed
+    remote_user: centos
+    become: yes
+    yum:
+      name: nfs-utils
+      state: latest
+      update_cache: yes
+      
+  - name: ensure nsf4-acl-tools package is installed
+    remote_user: centos
+    become: yes
+    yum:
+      name: nfs4-acl-tools
+      state: latest
+      update_cache: yes
+
+  - name: check whether /var/spool/mail exists
+    stat:
+      path: /var/spool/mail
+    register: stat_result
+    
+  - name: make mount point for mailstore
+    remote_user: centos
+    become: yes
+    file:
+      path: /var/spool/mail
+      state: directory
+      owner: root
+      group: mail
+      mode: 0775
+    when: stat_result.stat.exists == False 
+      
+  - name: mount mailstore nfs
+    remote_user: centos
+    become: yes
+    mount:
+      name: /var/spool/mail
+      src: fs-4280540a.efs.us-east-1.amazonaws.com:/
+      fstype: nfs
+      opts: nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
+      state: mounted 
+      
+  - name: change permissions on mount point for mail delivery
+    remote_user: centos
+    become: yes
+    file:
+      path: /var/spool/mail
+      state: directory
+      owner: root
+      group: mail
+      mode: 0775
+
