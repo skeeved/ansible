@@ -1,5 +1,5 @@
 ---
-- hosts: smtp-*.skeeved.org
+- hosts: tag_Name_skeeved_org_smtp_*
 
   tasks:
   - name: ensure nfs-utils package is installed
