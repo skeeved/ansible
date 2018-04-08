@@ -1,0 +1,8 @@
+---
+- hosts: all
+
+  tasks:
+  - name: ping
+    remote_user: centos
+    become: yes
+    ping:
