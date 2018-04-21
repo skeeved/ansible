@@ -1,0 +1,20 @@
+---
+- hosts: all
+  vars:
+    root_mail_destination: 'skeeved@skeeved.org'
+
+  tasks:
+    - name: mail aliases
+      remote_user: centos
+      become: yes
+      template:
+        src: templates/mail-aliases.j2
+        dest: /etc/aliases
+        force: yes
+        mode: 0644
+        owner: root
+        group: root
+      notify: newaliases
+  handlers:
+    - name: newaliases
+      command: newaliases
